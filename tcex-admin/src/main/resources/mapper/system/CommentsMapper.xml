@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CommentsMapper">
+    
+    <resultMap type="Comments" id="CommentsResult">
+        <result property="id"    column="id"    />
+        <result property="postId"    column="post_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="authorName"    column="author_name"    />
+        <result property="authorEmail"    column="author_email"    />
+        <result property="authorUrl"    column="author_url"    />
+        <result property="content"    column="content"    />
+        <result property="status"    column="status"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="updatedAt"    column="updated_at"    />
+    </resultMap>
+
+    <sql id="selectCommentsVo">
+        select id, post_id, user_id, parent_id, author_name, author_email, author_url, content, status, created_at, updated_at from comments
+    </sql>
+
+    <select id="selectCommentsList" parameterType="Comments" resultMap="CommentsResult">
+        <include refid="selectCommentsVo"/>
+        <where>  
+            <if test="postId != null "> and post_id = #{postId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+            <if test="authorName != null  and authorName != ''"> and author_name like concat('%', #{authorName}, '%')</if>
+            <if test="authorEmail != null  and authorEmail != ''"> and author_email = #{authorEmail}</if>
+            <if test="authorUrl != null  and authorUrl != ''"> and author_url = #{authorUrl}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+        </where>
+    </select>
+    
+    <select id="selectCommentsById" parameterType="Long" resultMap="CommentsResult">
+        <include refid="selectCommentsVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertComments" parameterType="Comments" useGeneratedKeys="true" keyProperty="id">
+        insert into comments
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="postId != null">post_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="authorName != null and authorName != ''">author_name,</if>
+            <if test="authorEmail != null">author_email,</if>
+            <if test="authorUrl != null">author_url,</if>
+            <if test="content != null and content != ''">content,</if>
+            <if test="status != null">status,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="postId != null">#{postId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="authorName != null and authorName != ''">#{authorName},</if>
+            <if test="authorEmail != null">#{authorEmail},</if>
+            <if test="authorUrl != null">#{authorUrl},</if>
+            <if test="content != null and content != ''">#{content},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+         </trim>
+    </insert>
+
+    <update id="updateComments" parameterType="Comments">
+        update comments
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="postId != null">post_id = #{postId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="authorName != null and authorName != ''">author_name = #{authorName},</if>
+            <if test="authorEmail != null">author_email = #{authorEmail},</if>
+            <if test="authorUrl != null">author_url = #{authorUrl},</if>
+            <if test="content != null and content != ''">content = #{content},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCommentsById" parameterType="Long">
+        delete from comments where id = #{id}
+    </delete>
+
+    <delete id="deleteCommentsByIds" parameterType="String">
+        delete from comments where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
