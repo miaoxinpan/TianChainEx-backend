@@ -61,6 +61,12 @@
             <artifactId>tcex-generator</artifactId>
         </dependency>
 
+        <!-- userService-->
+        <dependency>
+            <groupId>com.tzsw</groupId>
+            <artifactId>tcex-userService</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

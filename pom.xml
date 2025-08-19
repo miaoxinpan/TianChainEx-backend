@@ -216,6 +216,13 @@
                 <version>${tzsw.version}</version>
             </dependency>
 
+            <!-- userService-->
+            <dependency>
+                <groupId>com.tzsw</groupId>
+                <artifactId>tcex-userService</artifactId>
+                <version>${tzsw.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
